@@ -2,215 +2,239 @@
 
 ## Descripción
 
-Proyecto académico desarrollado en Python para implementar el clásico juego del ahorcado.
+Este proyecto consiste en desarrollar el clásico juego del **Ahorcado (Hangman)** utilizando Python.
 
-El objetivo es construir un juego por consola en el que el usuario debe adivinar una palabra o frase seleccionada aleatoriamente desde un archivo de texto.
+El programa selecciona aleatoriamente una palabra o frase desde un archivo de texto (`wordlist.txt`). El jugador debe descubrirla ingresando letras individuales. Cuenta con un máximo de seis intentos incorrectos.
 
-El proyecto se desarrolla de forma modular, utilizando funciones, clases, manejo de archivos y validación de entradas.
+El proyecto está organizado en módulos para separar las responsabilidades y facilitar su mantenimiento.
 
 ## Estructura del proyecto
 
 ```text
 hangman_project/
 │
-├── main.py          # Punto de entrada del programa
-├── game.py          # Clase principal y lógica del juego
+├── main.py          # Punto de entrada y flujo principal del juego
+├── game.py          # Clase HangmanGame y lógica del juego
 ├── utils.py         # Funciones auxiliares
-├── wordlist.txt     # Lista de palabras y frases
+├── wordlist.txt     # Palabras y frases disponibles
 ├── README.md        # Documentación del proyecto
-└── .gitignore       # Archivos que Git debe ignorar
+└── .gitignore       # Archivos excluidos de Git
 ```
 
 ## Requisitos
 
-- Python 3 instalado.
-- Git instalado.
+- Python 3.
+- Git.
 - Visual Studio Code (recomendado).
 
-No es necesario instalar paquetes externos para las funcionalidades implementadas hasta el momento, ya que se utilizan módulos de la biblioteca estándar de Python.
+No se necesitan instalar dependencias externas.
+
+## Cómo ejecutar el proyecto
+
+1. Clonar el repositorio:
+
+```bash
+git clone https://github.com/JuanPedroCamejo/hangman-project-utec.git
+```
+
+2. Ingresar a la carpeta:
+
+```bash
+cd hangman_project
+```
+
+3. Ejecutar el juego:
+
+```bash
+python main.py
+```
 
 ## Funcionalidades implementadas
 
-### Tarea 1: Selección aleatoria de palabras
+### Tarea 1 – Selección aleatoria de palabras
 
-Archivo: `utils.py`
+Se implementó la función `get_random_word()` en `utils.py`.
 
-Se implementó la función `get_random_word()`, que:
+Responsabilidades:
 
-- Lee las palabras y frases almacenadas en `wordlist.txt`.
-- Elimina espacios innecesarios al principio y al final de cada línea.
-- Comprueba que las entradas contengan letras y espacios.
-- Selecciona una entrada aleatoria utilizando `random.choice()`.
-- Devuelve la palabra o frase seleccionada.
+- Leer las palabras y frases del archivo `wordlist.txt`.
+- Eliminar espacios y saltos de línea al principio y al final mediante `strip()`.
+- Validar que cada entrada contenga letras y espacios.
+- Ignorar las líneas vacías y las entradas que no cumplen las condiciones.
+- Seleccionar una palabra o frase aleatoriamente mediante `random.choice()`.
+- Informar mediante una excepción si no existen palabras válidas.
 
-### Tarea 2: Clase HangmanGame
+Se utiliza `pathlib.Path` para localizar el archivo independientemente del directorio desde el que se ejecute el programa.
 
-Archivo: `game.py`
+### Tarea 2 – Clase principal del juego
 
-Se creó la clase `HangmanGame`, que administra el estado del juego.
+Se implementó la clase `HangmanGame` en `game.py`.
 
 Atributos:
 
-- `word`: palabra o frase que debe adivinarse.
-- `guessed_letters`: lista de letras adivinadas.
-- `max_errors`: máximo de errores permitidos (6).
-- `errors`: contador de respuestas incorrectas (inicialmente 0).
+| Atributo | Descripción |
+|---|---|
+| `word` | Palabra o frase que debe descubrir el jugador. |
+| `guessed_letters` | Lista de letras que ya fueron ingresadas. |
+| `max_errors` | Cantidad máxima de errores permitidos (6). |
+| `errors` | Cantidad de intentos incorrectos realizados. |
 
-Método:
+Métodos:
 
-- `display_progress()`: muestra las letras adivinadas en sus posiciones correspondientes y oculta las restantes mediante guiones bajos. Los espacios y signos de puntuación se muestran automáticamente.
+- `__init__(word)`: inicializa el estado del juego.
+- `display_progress()`: muestra las letras descubiertas y oculta las restantes con guiones bajos.
 
-### Tarea 3: Manejar la entrada del usuario
+Los espacios de las frases se mantienen visibles durante toda la partida.
 
-Archivo: `main.py`
+### Tarea 3 – Validación de entradas
 
-Se implementó el flujo principal del juego junto con la validación de la entrada del usuario, garantizando que:
-- Se solicite una letra de forma continua hasta recibir una respuesta válida.
-- Se rechacen entradas vacías, cadenas de varios caracteres, números y símbolos (utilizando `len()` y `.isalpha()`).
-- Se detecten e invaliden letras repetidas que el usuario ya haya intentado previamente.
+Se implementó la validación de las entradas en `main.py`.
 
-### Tarea 4: Actualizar el estado del juego
+El programa comprueba que:
 
-Archivo: `game.py`
+- El jugador ingrese una sola letra.
+- No se acepten entradas vacías.
+- No se acepten números ni símbolos.
+- No se permitan letras que ya fueron ingresadas anteriormente.
+- Las letras se conviertan a minúsculas para realizar las comparaciones.
 
-Se añadió el método `process_guess(self, letter)` a la clase `HangmanGame`, el cual:
-- Comprueba mediante el operador `in` si la letra está presente en la palabra secreta.
-- Agrega la letra a `guessed_letters` si el intento es correcto sin incrementar los errores.
-- Incrementa el contador de errores si la letra no forma parte de la palabra.
-- Devuelve un valor booleano indicando si la adivinanza fue correcta.
+Si la entrada no es válida, se informa el error y se solicita otra letra sin descontar intentos.
 
-### Tarea 5: Mostrar el progreso del juego
+### Tarea 4 – Procesamiento de intentos
 
-Archivo: `main.py`
+Se implementó el método `process_guess(letter)` en `game.py`.
 
-Se implementó la retroalimentación visual en cada turno de la consola, mostrando de manera clara:
-- Las letras intentadas por el usuario hasta el momento.
-- El progreso actual de la palabra mediante `display_progress()`.
-- Los intentos incorrectos restantes calculados como `max_errors - errors`, partiendo del límite de 6 errores permitidos.
+Responsabilidades:
 
-## Pruebas desde PowerShell
+- Comprobar si la letra ingresada está presente en la palabra o frase.
+- Utilizar el operador `in` para verificar su pertenencia.
+- Registrar las letras ingresadas en `guessed_letters`.
+- Incrementar `errors` cuando la letra no está presente.
+- Devolver `True` cuando la letra es correcta y `False` cuando es incorrecta.
 
-Abrir PowerShell y ubicarse en la carpeta del proyecto:
+Las comparaciones no distinguen entre mayúsculas y minúsculas.
 
-```powershell
-cd "$env:USERPROFILE\Desktop\hangman_project"
+### Tarea 5 – Visualización del estado del juego
+
+Se implementó la función `mostrar_estado(juego)` en `main.py`.
+
+Esta función muestra:
+
+- El progreso actual de la palabra o frase.
+- Las letras que el jugador ya intentó ingresar, tanto correctas como incorrectas.
+- La cantidad de intentos incorrectos restantes.
+
+Los intentos restantes se calculan mediante:
+
+```python
+intentos_restantes = juego.max_errors - juego.errors
 ```
 
-### 1. Probar la selección aleatoria de palabras
+La función se utiliza durante la partida y también al finalizarla, para mostrar el estado final tanto en caso de victoria como de derrota.
 
-Ejecutar:
+## Pruebas realizadas
+
+Se realizaron pruebas desde PowerShell para comprobar las distintas funcionalidades.
+
+### 1. Comprobar la selección aleatoria
 
 ```powershell
 python -c "from utils import get_random_word; print(get_random_word())"
 ```
 
-Resultado esperado:
+Permite comprobar que se obtiene una palabra o frase del archivo `wordlist.txt`.
 
-Se muestra una palabra o frase existente en `wordlist.txt`.
-
-Ejecutar el comando varias veces para comprobar que la selección puede variar.
-
-### 2. Probar la clase HangmanGame
-
-Ejecutar:
+### 2. Comprobar la inicialización de la clase
 
 ```powershell
-python -c "from game import HangmanGame; juego = HangmanGame('elephant'); juego.guessed_letters = ['e', 'a']; juego.display_progress()"
+python -c "from game import HangmanGame; juego = HangmanGame('Python'); print(juego.word); print(juego.guessed_letters); print(juego.max_errors); print(juego.errors)"
 ```
 
 Resultado esperado:
 
 ```text
-e _ e _ _ a _ _
-```
-
-Esta prueba comprueba que se muestran las letras adivinadas y se ocultan las restantes.
-
-### 3. Comprobar los atributos de la clase
-
-Ejecutar:
-
-```powershell
-python -c "from game import HangmanGame; juego = HangmanGame('elephant'); print(juego.word); print(juego.guessed_letters); print(juego.max_errors); print(juego.errors)"
-```
-
-Resultado esperado:
-
-```text
-elephant
+Python
 []
 6
 0
 ```
 
-Esto permite verificar los valores iniciales de los cuatro atributos.
-
-### 4. Probar el método process_guess (Tarea 4)
-Ejecutar una prueba con una letra correcta:
+### 3. Comprobar el procesamiento de una letra correcta
 
 ```powershell
 python -c "from game import HangmanGame; juego = HangmanGame('Python'); print(juego.process_guess('p')); print(juego.guessed_letters); print(juego.errors)"
 ```
+
 Resultado esperado:
 
 ```text
-Plaintext
 True
 ['p']
 0
 ```
 
-Ejecutar una prueba con una letra incorrecta:
+### 4. Comprobar el procesamiento de una letra incorrecta
 
-```PowerShell
-python -c "from game import HangmanGame; juego = HangmanGame('Python'); print(juego.process_guess('z')); print(juego.errors)"
+```powershell
+python -c "from game import HangmanGame; juego = HangmanGame('Python'); print(juego.process_guess('z')); print(juego.guessed_letters); print(juego.errors)"
 ```
+
 Resultado esperado:
 
 ```text
-Plaintext
 False
+['z']
 1
 ```
 
-### 5. Ejecutar el juego completo (Tarea 5)
+### 5. Comprobar la ejecución completa
 
-Ejecutar:
-
-```PowerShell
+```powershell
 python main.py
 ```
-Resultado esperado:
 
-```text
-Inicia la interacción por consola mostrando el progreso, las letras intentadas y los intentos incorrectos restantes en cada turno hasta completar la partida.
+Se realizaron pruebas de partidas ganadas y perdidas, verificando:
+
+- El descubrimiento progresivo de las letras.
+- El registro de letras correctas e incorrectas.
+- El rechazo de entradas inválidas.
+- La prevención de letras repetidas.
+- El descuento de intentos incorrectos.
+- La finalización al descubrir la palabra.
+- La finalización al alcanzar los seis errores.
+- La visualización del estado final de la partida.
+
+También se comprobó la sintaxis de los archivos Python mediante:
+
+```powershell
+python -m py_compile main.py
 ```
-## Archivos ignorados por Git
 
-El archivo `.gitignore` contiene:
+## Archivo .gitignore
+
+Se utiliza `.gitignore` para evitar subir archivos temporales y archivos compilados de Python.
+
+Contenido:
 
 ```gitignore
 __pycache__/
 *.py[cod]
 ```
 
-Estas reglas evitan subir a GitHub los archivos temporales y compilados que Python genera automáticamente.
-
 ## Tecnologías utilizadas
 
-- Python 3.
-- Git y GitHub.
-- Visual Studio Code.
-- PowerShell.
+- **Python 3:** desarrollo de la lógica y funcionalidades del juego.
+- **Git:** control de versiones.
+- **GitHub:** alojamiento del repositorio.
+- **Visual Studio Code:** entorno de desarrollo.
+- **PowerShell:** ejecución y pruebas desde Windows.
 
-## Estado del proyecto ETAPA 1
+## Estado del proyecto
 
-Proyecto en desarrollo. Las tareas se implementan y prueban progresivamente hasta completar el juego del ahorcado.
+Las tareas 1 a 5 se encuentran implementadas y verificadas mediante pruebas desde PowerShell.
 
-## Estado del proyecto ETAPA 2 
-
-Proyecto en desarrollo avanzado. Se han implementado y verificado con éxito la selección aleatoria de palabras, la modelación de la clase del juego, la validación estricta de las entradas del usuario, el procesamiento de adivinanzas y la retroalimentación visual del progreso.
+El proyecto continúa en desarrollo, sujeto a las próximas consignas y mejoras que se incorporen durante el curso.
 
 ## Repositorio
 
-[Hangman Project – GitHub](https://github.com/JuanPedroCamejo/hangman-project-utec.git)
+[GitHub – Hangman Project](https://github.com/JuanPedroCamejo/hangman-project-utec)

@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python3
 
 
@@ -5,25 +6,35 @@ from game import HangmanGame
 from utils import get_random_word
 
 
+def mostrar_estado(juego):
+    """Muestra el progreso, las letras intentadas y los intentos restantes."""
+
+    print("\n----------------------------------------")
+
+    print("Progreso actual: ", end="")
+    juego.display_progress()
+
+    print(f"Letras intentadas: {juego.guessed_letters}")
+
+    intentos_restantes = juego.max_errors - juego.errors
+    print(f"Intentos incorrectos restantes: {intentos_restantes} / "
+          f"{juego.max_errors}")
+
+
 def main():
+    """Ejecuta el juego del ahorcado."""
+
     print("Bienvenido al juego del Ahorcado")
 
     palabra_secreta = get_random_word()
     juego = HangmanGame(palabra_secreta)
 
     while juego.errors < juego.max_errors:
-        print("\n----------------------------------------")
 
-        print("Progreso actual: ", end="")
-        juego.display_progress()
-
-        print(f"Letras intentadas: {juego.guessed_letters}")
-
-        intentos_restantes = juego.max_errors - juego.errors
-        print(f"Intentos incorrectos restantes: {intentos_restantes} / "
-              f"{juego.max_errors}")
+        mostrar_estado(juego)
 
         letra_valida = None
+
         while letra_valida is None:
             entrada = input("Ingresa una letra: ").strip().lower()
 
@@ -49,9 +60,14 @@ def main():
         if all(letra in juego.guessed_letters
                for letra in juego.word.lower()
                if letra.isalpha()):
+
+            mostrar_estado(juego)
+
             print("\nFelicitaciones! Has ganado el juego.")
             print(f"La palabra secreta era: {juego.word}")
             return
+
+    mostrar_estado(juego)
 
     print("\nGame Over! Te has quedado sin intentos.")
     print(f"La palabra secreta era: {juego.word}")
