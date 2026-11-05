@@ -60,6 +60,34 @@ Método:
 
 - `display_progress()`: muestra las letras adivinadas en sus posiciones correspondientes y oculta las restantes mediante guiones bajos. Los espacios y signos de puntuación se muestran automáticamente.
 
+### Tarea 3: Manejar la entrada del usuario
+
+Archivo: `main.py`
+
+Se implementó el flujo principal del juego junto con la validación de la entrada del usuario, garantizando que:
+- Se solicite una letra de forma continua hasta recibir una respuesta válida.
+- Se rechacen entradas vacías, cadenas de varios caracteres, números y símbolos (utilizando `len()` y `.isalpha()`).
+- Se detecten e invaliden letras repetidas que el usuario ya haya intentado previamente.
+
+### Tarea 4: Actualizar el estado del juego
+
+Archivo: `game.py`
+
+Se añadió el método `process_guess(self, letter)` a la clase `HangmanGame`, el cual:
+- Comprueba mediante el operador `in` si la letra está presente en la palabra secreta.
+- Agrega la letra a `guessed_letters` si el intento es correcto sin incrementar los errores.
+- Incrementa el contador de errores si la letra no forma parte de la palabra.
+- Devuelve un valor booleano indicando si la adivinanza fue correcta.
+
+### Tarea 5: Mostrar el progreso del juego
+
+Archivo: `main.py`
+
+Se implementó la retroalimentación visual en cada turno de la consola, mostrando de manera clara:
+- Las letras intentadas por el usuario hasta el momento.
+- El progreso actual de la palabra mediante `display_progress()`.
+- Los intentos incorrectos restantes calculados como `max_errors - errors`, partiendo del límite de 6 errores permitidos.
+
 ## Pruebas desde PowerShell
 
 Abrir PowerShell y ubicarse en la carpeta del proyecto:
@@ -117,6 +145,46 @@ elephant
 
 Esto permite verificar los valores iniciales de los cuatro atributos.
 
+### 4. Probar el método process_guess (Tarea 4)
+Ejecutar una prueba con una letra correcta:
+
+```powershell
+python -c "from game import HangmanGame; juego = HangmanGame('Python'); print(juego.process_guess('p')); print(juego.guessed_letters); print(juego.errors)"
+```
+Resultado esperado:
+
+```text
+Plaintext
+True
+['p']
+0
+```
+
+Ejecutar una prueba con una letra incorrecta:
+
+```PowerShell
+python -c "from game import HangmanGame; juego = HangmanGame('Python'); print(juego.process_guess('z')); print(juego.errors)"
+```
+Resultado esperado:
+
+```text
+Plaintext
+False
+1
+```
+
+### 5. Ejecutar el juego completo (Tarea 5)
+
+Ejecutar:
+
+```PowerShell
+python main.py
+```
+Resultado esperado:
+
+```text
+Inicia la interacción por consola mostrando el progreso, las letras intentadas y los intentos incorrectos restantes en cada turno hasta completar la partida.
+```
 ## Archivos ignorados por Git
 
 El archivo `.gitignore` contiene:
@@ -135,9 +203,13 @@ Estas reglas evitan subir a GitHub los archivos temporales y compilados que Pyth
 - Visual Studio Code.
 - PowerShell.
 
-## Estado del proyecto
+## Estado del proyecto ETAPA 1
 
 Proyecto en desarrollo. Las tareas se implementan y prueban progresivamente hasta completar el juego del ahorcado.
+
+## Estado del proyecto ETAPA 2 
+
+Proyecto en desarrollo avanzado. Se han implementado y verificado con éxito la selección aleatoria de palabras, la modelación de la clase del juego, la validación estricta de las entradas del usuario, el procesamiento de adivinanzas y la retroalimentación visual del progreso.
 
 ## Repositorio
 
