@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 """Contiene la clase principal que administra el juego del ahorcado."""
 
@@ -52,3 +51,15 @@ class HangmanGame:
             if letter_lower not in self.guessed_letters:
                 self.guessed_letters.append(letter_lower)
             return False
+
+    def is_won(self):
+        """Comprueba si todas las letras de la palabra fueron adivinadas."""
+        return all(
+            letra.lower() in self.guessed_letters
+            for letra in self.word
+            if letra.isalpha()
+        )
+
+    def is_lost(self):
+        """Comprueba si se alcanzó el máximo de errores."""
+        return self.errors >= self.max_errors

@@ -29,7 +29,7 @@ def main():
     palabra_secreta = get_random_word()
     juego = HangmanGame(palabra_secreta)
 
-    while juego.errors < juego.max_errors:
+    while not juego.is_won() and not juego.is_lost():
 
         mostrar_estado(juego)
 
@@ -57,9 +57,7 @@ def main():
         else:
             print(f"La letra '{letra_valida}' no esta en la palabra.")
 
-        if all(letra in juego.guessed_letters
-               for letra in juego.word.lower()
-               if letra.isalpha()):
+        if juego.is_won():
 
             mostrar_estado(juego)
 
