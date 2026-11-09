@@ -140,14 +140,15 @@ Se implementaron los métodos `is_won()` e `is_lost()` en la clase `HangmanGame`
 - `is_lost()` devuelve `True` cuando la cantidad de errores alcanza `max_errors`.
 - En `main.py`, el bucle continúa mientras el jugador no haya ganado ni perdido. Al terminar, se muestra el resultado y la palabra secreta.
 
-
+Al ganar, el juego muestra un mensaje de felicitación. Al perder, informa que se acabaron los intentos.
 
 ### Tarea 7 – Revelado automático de caracteres no alfabéticos
 
-- Se modificó `display_progress()` en `game.py` para mostrar automáticamente los caracteres que no son letras.
+Se modificó `display_progress()` en `game.py` para mostrar automáticamente los caracteres que no son letras, como espacios, guiones y signos de puntuación, manteniendo su posición original en la palabra o frase.
 
-- `is_won()` comprueba únicamente las letras, mientras que `errors` aumenta solamente cuando se ingresa una letra incorrecta.
+Estos caracteres no se deben adivinar y no cuentan para la victoria. `is_won()` comprueba únicamente las letras, mientras que `errors` aumenta solamente cuando se ingresa una letra incorrecta.
 
+Por ejemplo, en `mother-in-law`, los guiones se muestran desde el inicio. Los espacios también permanecen visibles en las frases.
 
 ## Pruebas realizadas
 
