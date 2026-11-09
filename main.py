@@ -1,6 +1,5 @@
-
 #!/usr/bin/env python3
-
+"""Archivo principal que ejecuta el juego del ahorcado."""
 
 from game import HangmanGame
 from utils import get_random_word

@@ -132,6 +132,24 @@ intentos_restantes = juego.max_errors - juego.errors
 
 La función se utiliza durante la partida y también al finalizarla, para mostrar el estado final tanto en caso de victoria como de derrota.
 
+### Tarea 6 – Verificación de las condiciones de fin del juego
+
+Se implementaron los métodos `is_won()` e `is_lost()` en la clase `HangmanGame`, dentro de `game.py`.
+
+- `is_won()` devuelve `True` cuando todas las letras de la palabra fueron adivinadas.
+- `is_lost()` devuelve `True` cuando la cantidad de errores alcanza `max_errors`.
+- En `main.py`, el bucle continúa mientras el jugador no haya ganado ni perdido. Al terminar, se muestra el resultado y la palabra secreta.
+
+Al ganar, el juego muestra un mensaje de felicitación. Al perder, informa que se acabaron los intentos.
+
+### Tarea 7 – Revelado automático de caracteres no alfabéticos
+
+Se modificó `display_progress()` en `game.py` para mostrar automáticamente los caracteres que no son letras, como espacios, guiones y signos de puntuación, manteniendo su posición original en la palabra o frase.
+
+Estos caracteres no se deben adivinar y no cuentan para la victoria. `is_won()` comprueba únicamente las letras, mientras que `errors` aumenta solamente cuando se ingresa una letra incorrecta.
+
+Por ejemplo, en `mother-in-law`, los guiones se muestran desde el inicio. Los espacios también permanecen visibles en las frases.
+
 ## Pruebas realizadas
 
 Se realizaron pruebas desde PowerShell para comprobar las distintas funcionalidades.
@@ -231,7 +249,7 @@ __pycache__/
 
 ## Estado del proyecto
 
-Las tareas 1 a 5 se encuentran implementadas y verificadas mediante pruebas desde PowerShell.
+Las tareas 1 a 7 se encuentran implementadas y verificadas mediante pruebas desde PowerShell.
 
 El proyecto continúa en desarrollo, sujeto a las próximas consignas y mejoras que se incorporen durante el curso.
 
