@@ -19,8 +19,8 @@ def get_random_word():
             palabra = linea.strip()
 
             # Comprobar que contenga letras y espacios solamente
-            if palabra and any(letra.isalpha() for letra in palabra):
-                if all(letra.isalpha() or letra.isspace()
+        if palabra and any(letra.isalpha() for letra in palabra):
+                if all(letra.isalpha() or letra.isspace() or letra in "-'"
                        for letra in palabra):
                     palabras.append(palabra)
 
